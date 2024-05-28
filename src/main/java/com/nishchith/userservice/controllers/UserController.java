@@ -2,6 +2,8 @@ package com.nishchith.userservice.controllers;
 
 
 import com.nishchith.userservice.dtos.*;
+import com.nishchith.userservice.exceptions.InvalidCredentialsException;
+import com.nishchith.userservice.exceptions.UserNotFoundException;
 import com.nishchith.userservice.models.AppUser;
 import com.nishchith.userservice.models.Token;
 import com.nishchith.userservice.services.UserService;
@@ -31,5 +33,25 @@ public class UserController {
     @GetMapping("login")
     public Token login(@RequestBody LoginRequestDto loginRequestDto) {
         return userService.login(LoginUserDto.from(loginRequestDto));
+    }
+
+    @GetMapping("validate/{token}")
+    public UserDto validateToken(@PathVariable String token) {
+        return UserDto.from(userService.validateToken(token));
+    }
+
+    @ExceptionHandler({RuntimeException.class, NullPointerException.class})
+    public ResponseEntity<String> handleException() {
+        return new ResponseEntity<>("Something went Wrong", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> handleUserNotFoundException() {
+        return new ResponseEntity<>("Sorry, User not found", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<String> handleInvalidCredentialsException() {
+        return new ResponseEntity<>("Oops, Invalid credentials", HttpStatus.NOT_FOUND);
     }
 }

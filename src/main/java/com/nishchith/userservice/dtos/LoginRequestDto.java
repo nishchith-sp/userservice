@@ -6,6 +6,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class LoginRequestDto {
-    private String hashesPassword;
+    private String password;
     private String email;
 }
