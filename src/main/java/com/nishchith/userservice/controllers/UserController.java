@@ -52,6 +52,6 @@ public class UserController {
 
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<String> handleInvalidCredentialsException() {
-        return new ResponseEntity<>("Oops, Invalid credentials", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Oops, Invalid credentials", HttpStatus.FORBIDDEN);
     }
 }
