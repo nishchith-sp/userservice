@@ -2,6 +2,7 @@ package com.nishchith.userservice.security.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.nishchith.userservice.models.AppUser;
+import com.nishchith.userservice.models.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -37,6 +39,11 @@ public class CustomUserDetails implements UserDetails {
         this.credentialsNonExpired = true;
         this.enabled = true;
         this.userId = appUser.getId();
+
+        this.authorities = new ArrayList<>();
+        for(Role role:appUser.getRoles()) {
+            this.authorities.add(new CustomGrantedAuthority(role));
+        }
 
     }
 
